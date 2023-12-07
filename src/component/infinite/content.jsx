@@ -4,27 +4,39 @@ import { styled } from "styled-components";
 import { useEffect } from "react";
 const Content = (Image) => {
 
+    // props로 받은 전체 데이터 배열
     const [scrollImage, setScrollImage] = useState(Image.data);
+
+    // 초기 렌더링 시 보여줄 데이터 배열
     const [imageData, setImageData] = useState(null);
  
+    // props와  scrollImage
     useEffect(()=> {
         setScrollImage(Image.data);
+
+        //초기 보여줄 컨텐츠 개수 지정
         const sliceImage = scrollImage.slice(0,4);
         setImageData(sliceImage)
+
     },[Image, scrollImage]);
 
-
+    // 무한 스크롤 기능 중단 여부
     const [hasMore, setHasMore] = useState(true);
+
+    // 로드 될 컨텐츠 index 배열
     let [contentIdx, setContentIdx] = useState([4,9]);
 
+    // 스크롤링시 함수
     const fetchMoreData= () => {
+
+        // 로드될 컨텐츠의 마지막 index number가 전체 데이터 배열의 length 보다 작을 시 추가 데이터 load
         if ( contentIdx[1] < scrollImage.length) {
             setTimeout(()=> {
                 setImageData(imageData.concat(scrollImage.slice(contentIdx[0],contentIdx[1])))
                 setContentIdx(prevState => [prevState[0] + 5, prevState[1] + 5])
-                console.log(contentIdx)
             }, 700)
         }
+        //  무한스크롤 중단
         else {
             setHasMore(false);
         }
